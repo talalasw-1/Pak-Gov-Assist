@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pakistan Gov Services Assistant</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/tabler-icons.min.css" />
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --green: #0F6E56;
+            --green-light: #1D9E75;
+            --green-pale: #E1F5EE;
+            --green-border: #5DCAA5;
+            --bg: #F8F9FA;
+            --surface: #FFFFFF;
+            --border: rgba(0, 0, 0, .1);
+            --border-strong: rgba(0, 0, 0, .18);
+            --text: #1A1A1A;
+            --text-muted: #6B7280;
+            --text-hint: #9CA3AF;
+            --warning-bg: #FFFBEB;
+            --warning-text: #92400E;
+            --warning-border: #FCD34D;
+            --info-bg: #EFF6FF;
+            --info-text: #1D4ED8;
+            --info-border: #BFDBFE;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-pill: 999px;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, .06);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, .08)
+        }
+
+        @media(prefers-color-scheme:dark) {
+            :root {
+                --bg: #0F1117;
+                --surface: #1A1D23;
+                --border: rgba(255, 255, 255, .1);
+                --border-strong: rgba(255, 255, 255, .18);
+                --text: #F1F3F5;
+                --text-muted: #9CA3AF;
+                --text-hint: #6B7280;
+                --green-pale: #0D3D2C;
+                --green-border: #1D9E75;
+                --warning-bg: #1C1500;
+                --warning-text: #FCD34D;
+                --warning-border: #854F0B;
+                --info-bg: #0C1A2E;
+                --info-text: #93C5FD;
+                --info-border: #1E3A5F
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 15px;
+            line-height: 1.6
+        }
+
+        .page {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem 3rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem
+        }
+
+        .header {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: var(--shadow-sm)
+        }
+
+        .logo {
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-sm)
+        }
+
+        .header-text h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 3px
+        }
+
+        .header-text p {
+            font-size: 13px;
+            color: var(--text-muted)
+        }
+
+        .status-dot {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--green-light)
+        }
+
+        .status-dot::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green-light);
+            animation: blink 2s infinite
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .4
+            }
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: .875rem 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm)
+        }
+
+        .stat-card .num {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--green)
+        }
+
+        .stat-card .lbl {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 3px
+        }
+
+        .topics {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--border-strong);
+            font-size: 13px;
+            cursor: pointer;
+            background: var(--surface);
+            color: var(--text-muted);
+            transition: .15s
+        }
+
+        .chip:hover,
+        .chip.active {
+            background: var(--green-pale);
+            border-color: var(--green-border);
+            color: var(--green);
+            font-weight: 600
+        }
+
+        .chip i {
+            font-size: 15px
+        }
+
+        .chat-window {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            flex: 1
+        }
+
+        .chat-messages {
+            padding: 1.25rem;
+            min-height: 380px;
+            max-height: 500px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            scroll-behavior: smooth
+        }
+
+        .msg-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start
+        }
+
+        .msg-row.user {
+            flex-direction: row-reverse
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px
+        }
+
+        .avatar.bot {
+            background: var(--green-pale);
+            color: var(--green);
+            border: 1px solid var(--green-border)
+        }
+
+        .avatar.usr {
+            background: var(--info-bg);
+            color: var(--info-text);
+            border: 1px solid var(--info-border)
+        }
+
+        .bubble {
+            max-width: 78%;
+            padding: 11px 15px;
+            font-size: 14px;
+            line-height: 1.65;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            white-space: normal
+        }
+
+        .bubble.bot {
+            background: var(--surface);
+            border-radius: 4px var(--radius-lg) var(--radius-lg) var(--radius-lg)
+        }
+
+        .bubble.usr {
+            background: var(--green);
+            color: #fff;
+            border-color: transparent;
+            border-radius: var(--radius-lg) 4px var(--radius-lg) var(--radius-lg)
+        }
+
+        .src-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+            padding: 4px 9px;
+            background: var(--green-pale);
+            color: var(--green);
+            border-radius: 6px;
+            font-size: 11px;
+            border: 1px solid var(--green-border);
+            max-width: 100%;
+            word-break: break-word
+        }
+
+        .typing-bubble {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            padding: 12px 16px
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--text-hint);
+            animation: bounce 1.2s infinite
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: .2s
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: .4s
+        }
+
+        @keyframes bounce {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(.7);
+                opacity: .4
+            }
+
+            40% {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        .chat-divider {
+            border-top: 1px solid var(--border);
+            padding: 1rem 1.25rem;
+            background: var(--bg)
+        }
+
+        .quick-pills {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 10px
+        }
+
+        .qpill {
+            font-size: 12px;
+            padding: 5px 11px;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--border-strong);
+            cursor: pointer;
+            background: var(--surface);
+            color: var(--text-muted);
+            transition: .15s
+        }
+
+        .qpill:hover {
+            background: var(--green-pale);
+            border-color: var(--green-border);
+            color: var(--green)
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px
+        }
+
+        .input-row input {
+            flex: 1;
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-strong);
+            background: var(--surface);
+            color: var(--text);
+            outline: none
+        }
+
+        .input-row input:focus {
+            border-color: var(--green-light);
+            box-shadow: 0 0 0 3px rgba(29, 158, 117, .12)
+        }
+
+        .send-btn {
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            background: var(--green);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 7px
+        }
+
+        .send-btn:hover {
+            background: var(--green-light)
+        }
+
+        .send-btn:disabled {
+            background: var(--border-strong);
+            color: var(--text-hint);
+            cursor: not-allowed
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-hint);
+            padding-top: .5rem
+        }
+
+        .footer a {
+            color: var(--text-muted);
+            text-decoration: none
+        }
+
+        .footer a:hover {
+            color: var(--green)
+        }
+
+        @media(max-width:560px) {
+            .bubble {
+                max-width: 90%
+            }
+
+            .header-text h1 {
+                font-size: 15px
+            }
+
+            .status-dot {
+                display: none
+            }
+
+            .input-row {
+                flex-direction: column
+            }
+
+            .send-btn {
+                justify-content: center
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page">
+
+        <header class="header">
+            <svg class="logo" viewBox="0 0 64 64" aria-label="Pakistan Gov Assistant Logo">
+                <defs>
+                    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+                        <stop offset="0%" stop-color="#0F6E56" />
+                        <stop offset="100%" stop-color="#1D9E75" />
+                    </linearGradient>
+                </defs>
+                <rect width="64" height="64" rx="16" fill="url(#g)" />
+                <rect x="8" y="8" width="14" height="48" rx="3" fill="#fff" opacity=".95" />
+                <path d="M43.5 17.5a13.5 13.5 0 1 0 0 29 16 16 0 1 1 0-29z" fill="#fff" />
+                <path d="M47.5 25l1.8 4.1 4.4.4-3.3 2.9 1 4.3-3.9-2.2-3.8 2.2 1-4.3-3.3-2.9 4.4-.4z" fill="#fff" />
+            </svg>
+
+            <div class="header-text">
+                <h1>Pakistan Gov Services Assistant</h1>
+                <p>NADRA · Passport · Driving License · Police / PKM · FBR · Excise · PLRA · EOBI</p>
+            </div>
+
+            <div class="status-dot">Online</div>
+        </header>
+
+        <section class="stats">
+            <div class="stat-card">
+                <div class="num">8</div>
+                <div class="lbl">Service categories</div>
+            </div>
+            <div class="stat-card">
+                <div class="num" id="q-count">0</div>
+                <div class="lbl">Questions answered</div>
+            </div>
+        </section>
+
+        <nav class="topics">
+            <button class="chip active" onclick="setTopic(this,'nadra')"><i class="ti ti-id"></i>NADRA</button>
+            <button class="chip" onclick="setTopic(this,'passport')"><i class="ti ti-notebook"></i>Passport</button>
+            <button class="chip" onclick="setTopic(this,'driving')"><i class="ti ti-car"></i>Driving</button>
+            <button class="chip" onclick="setTopic(this,'police')"><i class="ti ti-shield"></i>Police</button>
+            <button class="chip" onclick="setTopic(this,'fbr')"><i class="ti ti-receipt-tax"></i>FBR</button>
+            <button class="chip" onclick="setTopic(this,'excise')"><i class="ti ti-car-garage"></i>Excise</button>
+            <button class="chip" onclick="setTopic(this,'plra')"><i class="ti ti-map-pin"></i>PLRA</button>
+            <button class="chip" onclick="setTopic(this,'eobi')"><i class="ti ti-building-bank"></i>EOBI</button>
+        </nav>
+
+        <section class="chat-window">
+            <div class="chat-messages" id="chat">
+                <div class="msg-row">
+                    <div class="avatar bot"><i class="ti ti-robot"></i></div>
+                    <div class="bubble bot">
+                        <strong>Welcome!</strong> I can answer questions about Pakistan government services using the
+                        local RAG knowledge base.<br><br>
+                        Ask about CNIC, passport, driving license, police services, FBR, excise, PLRA, or EOBI.
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-divider">
+                <div class="quick-pills" id="pills"></div>
+                <div class="input-row">
+                    <input type="text" id="qinput" placeholder="Type your question in English..."
+                        onkeydown="if(event.key==='Enter') sendMsg()" autocomplete="off" />
+                    <button class="send-btn" id="sbtn" onclick="sendMsg()">
+                        <i class="ti ti-send"></i> Send
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>
+                Data sources:
+                <a href="https://nadra.gov.pk" target="_blank">NADRA</a> ·
+                <a href="https://dgip.gov.pk" target="_blank">DGI&amp;P</a> ·
+                <a href="https://dlims.punjab.gov.pk" target="_blank">DLIMS</a> ·
+                <a href="https://punjabpolice.gov.pk" target="_blank">Punjab Police</a> ·
+                <a href="https://fbr.gov.pk" target="_blank">FBR</a>
+                <br>Powered by BGE-large + LangChain + ChromaDB + Groq API
+            </p>
+        </footer>
+
+    </main>
+
+    <script>
+        const QUICK = {
+            nadra: [
+                "What is CNIC?",
+                "What is CRC certificate?",
+                "How can I apply for Smart CNIC?",
+                "What are charges for duplicate Smart CNIC?"
+            ],
+            passport: [
+                "How to apply for a new passport?",
+                "What is an e-Passport?",
+                "What are urgent passport charges?",
+                "How to pay passport fee online?"
+            ],
+            driving: [
+                "How to get a learner license?",
+                "Difference between LTV and HTV?",
+                "What is DLIMS?",
+                "What is the sign test passing score for a car driving license in Punjab?"
+            ],
+            police: [
+                "How to get Police Character Certificate?",
+                "How to get a copy of FIR?",
+                "What services are available at PKM?",
+                "How to register tenant?"
+            ],
+            fbr: [
+                "How can I register for NTN?",
+                "What is ATL?",
+                "How to file income tax return?",
+                "What is IRIS portal?"
+            ],
+            excise: [
+                "What is token tax?",
+                "How can I verify vehicle ownership?",
+                "How to transfer vehicle ownership?",
+                "What is MTMIS?"
+            ],
+            plra: [
+                "What is Fard?",
+                "What is Intiqal in land records?",
+                "How can I check land ownership records?",
+                "What is PLRA?"
+            ],
+            eobi: [
+                "What is EOBI pension?",
+                "What is EOBI IP Number?",
+                "How can my father get EOBI pension?",
+                "What is EOBI contribution?"
+            ]
+        };
+
+        let currentTopic = 'nadra';
+        let qCount = 0;
+
+        function setTopic(el, topic) {
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            currentTopic = topic;
+            renderPills();
+        }
+
+        function renderPills() {
+            const container = document.getElementById('pills');
+            container.innerHTML = '';
+            (QUICK[currentTopic] || []).forEach(q => {
+                const btn = document.createElement('button');
+                btn.className = 'qpill';
+                btn.textContent = q;
+                btn.onclick = () => {
+                    document.getElementById('qinput').value = q;
+                    sendMsg();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function escapeHTML(str) {
+            return String(str)
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;');
+        }
+
+        function formatAnswer(text) {
+            return escapeHTML(text || '')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+        }
+
+        function addMessage(text, role, src) {
+            const chat = document.getElementById('chat');
+            const row = document.createElement('div');
+            row.className = 'msg-row' + (role === 'user' ? ' user' : '');
+
+            const av = document.createElement('div');
+            av.className = 'avatar ' + (role === 'user' ? 'usr' : 'bot');
+            av.innerHTML = role === 'user' ? '<i class="ti ti-user"></i>' : '<i class="ti ti-robot"></i>';
+
+            const bub = document.createElement('div');
+            bub.className = 'bubble ' + (role === 'user' ? 'usr' : 'bot');
+            bub.innerHTML = role === 'user' ? escapeHTML(text) : formatAnswer(text);
+
+
+            if (role === 'user') {
+                row.appendChild(bub);
+                row.appendChild(av);
+            } else {
+                row.appendChild(av);
+                row.appendChild(bub);
+            }
+
+            chat.appendChild(row);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function showTyping() {
+            const chat = document.getElementById('chat');
+            const row = document.createElement('div');
+            row.className = 'msg-row';
+            row.id = 'typing-indicator';
+
+            const av = document.createElement('div');
+            av.className = 'avatar bot';
+            av.innerHTML = '<i class="ti ti-robot"></i>';
+
+            const bub = document.createElement('div');
+            bub.className = 'bubble bot typing-bubble';
+            bub.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+
+            row.appendChild(av);
+            row.appendChild(bub);
+            chat.appendChild(row);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function removeTyping() {
+            const el = document.getElementById('typing-indicator');
+            if (el) el.remove();
+        }
+
+        async function sendMsg() {
+            const inp = document.getElementById('qinput');
+            const btn = document.getElementById('sbtn');
+            const q = inp.value.trim();
+            if (!q) return;
+
+            inp.value = '';
+            btn.disabled = true;
+            addMessage(q, 'user');
+            showTyping();
+
+            try {
+                // ✅ API integrated for Vercel frontend → Hugging Face backend
+                const API_BASE = "https://talal-aswad-pakistan-government-assistant.hf.space";
+                const res = await fetch(`${API_BASE}/api/ask?q=${encodeURIComponent(q)}`, {
+                    method: "GET",
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                });
+                const data = await res.json();
+                removeTyping();
+
+                const src = data.sources && data.sources.length
+                    ? data.sources.join(' | ')
+                    : null;
+
+                addMessage(data.answer || 'No answer received.', 'bot', src);
+                qCount++;
+                document.getElementById('q-count').textContent = qCount;
+
+            } catch (err) {
+                removeTyping();
+                addMessage('Server connection failed. Please try again.', 'bot', null);
+            }
+
+            btn.disabled = false;
+            inp.focus();
+        }
+
+        renderPills();
+        document.getElementById('qinput').focus();
+    </script>
+</body>
+
+</html>
